@@ -1,14 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import layout from '@/shared/layout.vue'
-import posts from '@/views/post/index.vue'
+import posts from '@/views/post/list.vue'
 import postsEdit from '@/views/post/edit.vue'
 import categories from '@/views/category/list.vue'
-import categoriesEdit from '@/views/category/edit.vue'
 import ads from '@/views/ad/list.vue'
 import adsEdit from '@/views/ad/edit.vue'
 import adminUsers from '@/views/adminUser/list.vue'
-import adminUsersEdit from '@/views/adminUser/edit.vue'
 import sites from '@/views/site/index.vue'
 
 Vue.use(Router)
@@ -30,21 +28,14 @@ export default new Router({
           component: posts
         },
         {
-          path: '/posts/edit/:id',
+          path: '/posts/edit',
           name: 'postsEdit',
-          props: true,
           component: postsEdit
         },
         {
           path: '/categories',
           name: 'categories',
           component: categories
-        },
-        {
-          path: '/categories/edit/:id',
-          name: 'categoriesEdit',
-          props: true,
-          component: categoriesEdit
         },
         {
           path: '/ads',
@@ -61,12 +52,6 @@ export default new Router({
           path: '/admin_users',
           name: 'adminUsers',
           component: adminUsers
-        },
-        {
-          path: '/admin_users/edit/:id',
-          name: 'adminUsersEdit',
-          props: true,
-          component: adminUsersEdit
         },
         {
           path: '/sites',

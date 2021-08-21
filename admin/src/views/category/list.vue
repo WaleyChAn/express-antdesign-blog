@@ -11,9 +11,14 @@
         </div>
       </div>
       <div class="layout-flex-l">
-        <div class="badmin-table">
+        <div class="badmin-table"
+             :class="setTableClass()">
           <a-table :columns="tableColumns"
-                   :data-source="tableData">
+                   :data-source="tableData"
+                   :scroll="{ x:tableScrollX, y: tableScrollY }"
+                   :pagination="false"
+                   :loading="tableLoading"
+                   row-key="_id">
             <template slot="color"
                       slot-scope="text, record">
               <div class="badmin-tags ">
@@ -31,7 +36,7 @@
                 编辑
               </span>
               <a-popconfirm v-if="tableData.length"
-                            :title="'确定删除分类 “'+ record.name + '” 吗？'"
+                            :title="'确定删除 “'+ record.name + '” 吗？'"
                             ok-text="确定"
                             cancel-text="取消"
                             @confirm="() => onDelete(record._id)">
@@ -45,46 +50,28 @@
         </div>
       </div>
     </div>
-    <a-modal :title="modalTitle"
-             :visible="modalVisible"
-             :confirm-loading="confirmLoading"
-             ok-text="确认"
-             cancel-text="取消"
-             @ok="handleOk"
-             @cancel="handleCancel">
-      <a-form-model ref="innerForm"
-                    :model="tmpItem"
-                    :rules="innerFormRules">
-        <a-form-model-item label="分类名称"
-                           prop="name">
-          <a-input v-model="tmpItem.name" />
-        </a-form-model-item>
-        <a-form-model-item label="分类样式"
-                           prop="color">
-          <badmin-color-picker v-model="tmpItem.color"></badmin-color-picker>
-        </a-form-model-item>
-      </a-form-model>
-      <p> </p>
-    </a-modal>
+    <edit-form ref="editForm"
+               v-model="tmpItem"
+               @fetchData="fetchData"></edit-form>
   </div>
 </template>
 
 <script>
-import BadminColorPicker from '@/components/colorPicker'
+import EditForm from './edit.vue'
 
 const tableColumns = [
   {
-    title: '分类名称',
-    dataIndex: 'name',
-    key: 'name'
-  },
-  {
-    title: '分类ID',
+    title: 'ID',
     dataIndex: '_id',
     key: '_id'
   },
   {
-    title: '分类样式',
+    title: '名称',
+    dataIndex: 'name',
+    key: 'name'
+  },
+  {
+    title: '样式',
     dataIndex: 'color',
     key: 'color',
     scopedSlots: { customRender: 'color' }
@@ -98,82 +85,56 @@ const tableColumns = [
   }
 ]
 
-const tableData = [
-  {
-    key: '1',
-    name: 'John Brown',
-    _id: 32,
-    color: '#87d068'
-  },
-  {
-    key: '2',
-    name: 'John Brown',
-    _id: 32,
-    color: '#409eff'
-  }
-]
-
 export default {
   name: 'BadminCategoryList',
   components: {
-    BadminColorPicker
+    EditForm
   },
   data () {
     return {
-      tableData,
-      tableColumns,
       tmpItem: {},
-      modalVisible: false,
-      modalTitle: '',
-      confirmLoading: false,
-      innerFormRules: {
-        name: [
-          { required: true, message: '请输入分类名称', trigger: 'blur' }
-        ]
-      }
+      tableData: [],
+      tableColumns,
+      tableScrollX: false,
+      tableScrollY: true,
+      tableLoading: false
     }
   },
+  created () {
+    this.fetchData()
+  },
   methods: {
+    setTableClass () {
+      return [
+        { 'scoll-x': this.tableScrollX },
+        { 'scoll-y': this.tableScrollY }
+      ]
+    },
     showModal (item) {
-      this.modalTitle = '新增分类'
       if (item) {
-        this.modalTitle = '编辑分类'
         this.tmpItem = JSON.parse(JSON.stringify(item))
       }
-      this.modalVisible = true
-    },
-    handleOk () {
-      let _this = this
-      _this.$refs.innerForm.validate(valid => {
-        if (valid) {
-          _this.confirmLoading = true
-          if (_this.tmpItem._id) {
-            _this.onEdit(this.tmpItem._id)
-          } else {
-            _this.onSave()
-          }
-        } else {
-          return false
-        }
-      })
-    },
-    handleCancel () {
-      this.resetModal()
+      this.$refs.editForm.modalVisible = true
     },
     resetModal () {
-      this.tmpItem = {}
-      this.confirmLoading = false
+      this.modalLoading = false
       this.modalVisible = false
-      this.$refs.innerForm.resetFields()
+      this.$refs.modalForm.clearValidate()
     },
-    onSave () {
-      this.resetModal()
+    async onDelete (id) {
+      const res = await this.$http.delete(`rest/categories/${id}`)
+      if (res && res.data) {
+        this.$message.success('删除成功！')
+        this.fetchData()
+      }
     },
-    onEdit (id) {
-      this.resetModal()
-    },
-    onDelete (id) {
-      console.log(id)
+    async fetchData () {
+      this.tableLoading = true
+      const res = await this.$http.get('rest/categories')
+      this.tableLoading = false
+      if (res && res.data) {
+        this.tableData = res.data
+      }
     }
   }
 }

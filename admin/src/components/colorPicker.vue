@@ -14,7 +14,8 @@
                  @visibleChange="handleVisible">
         <template slot="content">
           <chrome-picker v-model="pickerValue"
-                         @input="updateValue"></chrome-picker>
+                         @input="updateValue"
+                         class="badmin-colorpicker-palette"></chrome-picker>
         </template>
         <div class="tags-radio"
              :class="{'active': tmpValue && presets.indexOf(tmpValue) === -1}"
@@ -61,7 +62,7 @@ export default {
   watch: {
     value: {
       handler (n) {
-        this.tmpValue = n
+        this.tmpValue = n || this.presets[0] || '#c0c4cc'
       },
       deep: true
     },
@@ -73,7 +74,7 @@ export default {
     }
   },
   created () {
-    this.tmpValue = this.value
+    this.tmpValue = this.value || this.presets[0] || '#c0c4cc'
   },
   methods: {
     handleVisible (visible) {
@@ -83,7 +84,7 @@ export default {
     },
     updateValue (color) {
       const colorRGBA = color.rgba || {}
-      const colorStyle = 'rgba(' + colorRGBA.r + ', ' + colorRGBA.g + ', ' + colorRGBA.b + ', ' + colorRGBA.a + ')'
+      const colorStyle = `rgba(${colorRGBA.r}, ${colorRGBA.g}, ${colorRGBA.b}, ${colorRGBA.a})`
       this.tmpValue = colorStyle
     }
   }

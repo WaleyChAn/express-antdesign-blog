@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    BadminPostEdit
+    {{ postID }}
   </div>
 </template>
 
@@ -8,6 +8,15 @@
 export default {
   name: 'BadminPostEdit',
   components: {
+  },
+  data () {
+    return {
+    }
+  },
+  computed: {
+    postID () {
+      return this.$route.query.id || ''
+    }
   }
 }
 </script>
