@@ -1,7 +1,8 @@
 <template>
   <div class="badmin-header">
     <div class="badmin-box clearfix">
-      <div class="badmin-crumbs left">
+      <div v-if="currentCrumbs"
+           class="badmin-crumbs left">
         <div class="crumbs-back"
              @click="backward">
           <a-icon type="arrow-left" />
@@ -36,7 +37,8 @@
           </a-breadcrumb-item>
         </a-breadcrumb>
       </div>
-      <div class="header-user right">
+      <div v-if="currentUser"
+           class="header-user right ml-sm">
         <a-dropdown placement="bottomCenter">
           <div class="user-info">
             <a-avatar :src="currentUser.avatar"
@@ -55,21 +57,21 @@
               <span>博客设置</span>
             </a-menu-item>
             <a-menu-divider />
-            <a-menu-item>
+            <a-menu-item @click="logout">
               <a-icon type="logout" />
               <span>退出登录</span>
             </a-menu-item>
           </a-menu>
         </a-dropdown>
       </div>
-      <div class="right mr-sm">
+      <div class="right ml-sm">
         <a-button type="primary"
                   shape="round"
                   icon="form">
           新增帖子
         </a-button>
       </div>
-      <div class="right mr-sm">
+      <div class="right">
         <a-button type="primary"
                   ghost
                   shape="round"
@@ -92,23 +94,29 @@ export default {
   },
   data () {
     return {
-      currentUser: {
-        _id: 'test1test1',
-        username: 'admin',
-        nickname: 'admin',
-        password: '123456',
-        avatar: ''
-      }
+
     }
   },
   computed: {
     ...mapGetters({
-      currentCrumbs: 'getCurrentCrumbs'
+      currentCrumbs: 'getCurrentCrumbs',
+      currentUser: 'getCurrentUser'
     })
   },
   methods: {
     backward () {
       this.$router.back()
+    },
+    logout () {
+      let _this = this
+      _this.$confirm({
+        title: '确定退出登录吗?',
+        onOk () {
+          _this.$storage.remove('token')
+          _this.$router.go(0)
+        },
+        class: 'badmin-modal'
+      })
     }
   }
 }

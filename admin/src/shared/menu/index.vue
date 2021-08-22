@@ -3,7 +3,7 @@
     <div class="menu-wrapper">
       <div class="layout-flex column">
         <div class="layout-flex-l scroll-y">
-          <a-menu v-model="menuSelected"
+          <a-menu :default-selected-keys="menuSelected"
                   :default-open-keys="defaultOpen"
                   mode="inline"
                   :inline-collapsed="collapsed">
@@ -66,7 +66,7 @@ export default {
       this.setCurrentCrumbs()
     }
   },
-  mounted () {
+  created () {
     this.setCurrentCrumbs()
   },
   methods: {

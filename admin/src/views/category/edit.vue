@@ -5,6 +5,7 @@
            :afterClose="handleClose"
            ok-text="确认"
            cancel-text="取消"
+           class="badmin-modal"
            @ok="handleOk"
            @cancel="handleCancel">
     <a-form-model ref="modalForm"

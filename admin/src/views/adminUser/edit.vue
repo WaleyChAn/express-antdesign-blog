@@ -1,39 +1,48 @@
 <template>
   <a-modal :title="tmpItem._id ? '编辑管理员' : '新增管理员'"
            :visible="modalVisible"
-           :afterClose="handleClose">
+           :afterClose="handleClose"
+           class="badmin-modal"
+           @cancel="handleCancel">
     <a-form-model ref="modalForm"
                   :model="tmpItem"
                   :rules="modalFormRules">
-      <a-form-model-item label="名称"
-                         prop="username">
-        <a-input v-model="tmpItem.username"
-                 placeholder="请输入名称" />
-      </a-form-model-item>
-      <a-form-model-item label="昵称"
-                         prop="nickname">
-        <a-input v-model="tmpItem.nickname"
-                 placeholder="请输入昵称" />
-      </a-form-model-item>
-      <a-form-model-item label="头像"
-                         prop="avatar">
-        <a-upload name="file"
-                  list-type="picture-card"
-                  class="avatar-uploader"
-                  :show-upload-list="false"
-                  :action="$http.defaults.baseURL + '/upload'"
-                  @change="handleChange">
-          <img v-if="tmpItem.avatar"
-               :src="tmpItem.avatar"
-               alt="avatar" />
-          <div v-else>
-            <a-icon :type="uploadLoading ? 'loading' : 'plus'" />
-            <div class="ant-upload-text">
-              上传
-            </div>
-          </div>
-        </a-upload>
-      </a-form-model-item>
+
+      <a-row :gutter="20">
+        <a-col :span="8">
+          <a-form-model-item label="头像"
+                             prop="avatar">
+            <a-upload name="file"
+                      list-type="picture-card"
+                      class="badmin-uploader-avatar"
+                      :show-upload-list="false"
+                      :action="$http.defaults.baseURL + '/upload'"
+                      :before-upload="beforeUpload"
+                      @change="handleChange">
+              <img v-if="tmpItem.avatar"
+                   :src="tmpItem.avatar"
+                   alt="avatar" />
+              <div v-else>
+                <a-icon :type="uploadLoading ? 'loading' : 'plus'" />
+              </div>
+            </a-upload>
+          </a-form-model-item>
+        </a-col>
+        <a-col :span="16">
+          <a-form-model-item label="名称"
+                             prop="username">
+            <a-input v-model="tmpItem.username"
+                     placeholder="请输入名称" />
+          </a-form-model-item>
+          <a-form-model-item label="昵称"
+                             prop="nickname">
+            <a-input v-model="tmpItem.nickname"
+                     placeholder="请输入昵称" />
+          </a-form-model-item>
+        </a-col>
+
+      </a-row>
+
       <a-form-model-item v-if="tmpItem._id ? passwordShow : true"
                          label="密码"
                          prop="password">
@@ -186,10 +195,30 @@ export default {
       this.$emit('fetchData')
     },
     handleChange (info) {
-      console.log('handleChange', info)
+      if (info.file.status === 'uploading') {
+        this.tmpItem.avatar = ''
+        this.uploadLoading = true
+        return
+      }
+      if (info.file.status === 'done' && info.file.response) {
+        this.tmpItem.avatar = info.file.response.url
+        this.uploadLoading = false
+      }
+      if (info.file.status === 'error') {
+        this.$message.error('图片上传失败')
+        this.uploadLoading = false
+      }
     },
     beforeUpload (file) {
-      console.log('beforeUpload', file)
+      const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
+      if (!isJpgOrPng) {
+        this.$message.error('请上传jpg或者png格式的头像')
+      }
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isLt2M) {
+        this.$message.error('图片大小请不要超过2MB')
+      }
+      return isJpgOrPng && isLt2M
     }
   }
 }

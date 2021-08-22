@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '../store'
 import layout from '@/shared/layout.vue'
+import login from '@/shared/login.vue'
 import posts from '@/views/post/list.vue'
 import postsEdit from '@/views/post/edit.vue'
 import categories from '@/views/category/list.vue'
@@ -15,7 +17,7 @@ Router.prototype.push = function push (to) {
   return VueRouterPush.call(this, to).catch(err => err)
 }
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
@@ -61,12 +63,26 @@ export default new Router({
       ]
     },
     {
+      path: '/login',
+      name: 'login',
+      component: login,
+      meta: {
+        isPublic: true
+      }
+    },
+    {
       path: '/403',
-      component: () => import('@/shared/403')
+      component: () => import('@/shared/403'),
+      meta: {
+        isPublic: true
+      }
     },
     {
       path: '/404',
-      component: () => import('@/shared/404')
+      component: () => import('@/shared/404'),
+      meta: {
+        isPublic: true
+      }
     },
     {
       path: '*',
@@ -75,3 +91,24 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach(async (to, from, next) => {
+  const token = Vue.prototype.$storage.get('token')
+  let currentUser = store.state.currentUser
+  if (!currentUser && token) {
+    currentUser = await store.dispatch('fetchCurrentUser')
+  }
+
+  if (!currentUser && !to.meta.isPublic) {
+    router.push({
+      name: 'login',
+      params: { to: to }
+    })
+  } else if (currentUser && to.path === '/login') {
+    next('/')
+  } else {
+    next()
+  }
+})
+
+export default router
