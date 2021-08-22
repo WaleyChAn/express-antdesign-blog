@@ -1,6 +1,14 @@
 module.exports = app => {
   const express = require('express')
   const assert = require('http-assert')
+  const multer = require('multer')
+  const bcrypt = require('bcryptjs')
+  const jwt = require('jsonwebtoken')
+
+  const AdminUser = require('../../models/AdminUser')
+  const authMiddleware = require('../../middleware/auth')
+  const resourceMiddleware = require('../../middleware/resource')
+
   const router = express.Router({
     mergeParams: true
   })
@@ -28,28 +36,38 @@ module.exports = app => {
   })
 
   router.get('/:id', async (req, res) => {
-    const data = await req.Model.findById(req.params.id)
+    let data = {}
+    if (req.params.id === 'current_user') {
+      data = req.user
+    } else {
+      data = await req.Model.findById(req.params.id)
+    }
     res.send(data)
   })
 
   // CRUD
-  const inflection = require('inflection')
-  app.use('/admin/api/rest/:resource', async (req, res, next) => {
-    const modelName = inflection.classify(req.params.resource)
-    const Model = require(`../../models/${modelName}`)
-    req.Model = Model
-    next()
-  }, router)
+  app.use('/admin/api/rest/:resource', authMiddleware({ model: AdminUser }), resourceMiddleware(), router)
 
   // upload
-  const multer = require('multer')
   const upload = multer({ dest: __dirname + '/../../uploads' })
-  app.post('/admin/api/upload', upload.single('file'), async (req, res) => {
+  app.post('/admin/api/upload', authMiddleware({ model: AdminUser }), upload.single('file'), async (req, res) => {
     const file = req.file
-    file.url = `http://localhost:3000/uploads/${file.name}`
+    file.url = `http://localhost:3000/uploads/${file.filename}`
     res.send(file)
   })
 
+  // login
+  app.post('/admin/api/login', async (req, res) => {
+    const { username, password } = req.body
+    const user = await AdminUser.findOne({ username }).select('+password')
+    assert(user, 422, '用户不存在')
+    const isValid = bcrypt.compareSync(password, user.password)
+    assert(isValid, 422, '密码错误')
+    const token = jwt.sign({ id: user._id }, app.get('jwtSecrte'))
+    res.send(token)
+  })
+
+  // error interception
   app.use(async (err, req, res, next) => {
     if (err.errors) {
       if (err.errors.name.kind === 'unique') {

@@ -48,7 +48,7 @@
             <a-icon type="down" />
           </div>
           <a-menu slot="overlay">
-            <a-menu-item>
+            <a-menu-item @click="showModal(currentUser)">
               <a-icon type="edit" />
               <span>修改信息</span>
             </a-menu-item>
@@ -80,21 +80,25 @@
         </a-button>
       </div>
     </div>
+    <edit-form ref="editForm"
+               v-model="tmpItem"></edit-form>
   </div>
 </template>
 
 <script>
-import SubMenu from './menu/sub.vue'
+import SubMenu from '@/shared/menu/sub.vue'
+import EditForm from '@/views/adminUser/edit.vue'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'BadminHeader',
   components: {
-    SubMenu
+    SubMenu,
+    EditForm
   },
   data () {
     return {
-
+      tmpItem: {}
     }
   },
   computed: {
@@ -104,6 +108,12 @@ export default {
     })
   },
   methods: {
+    showModal (item) {
+      if (item) {
+        this.tmpItem = JSON.parse(JSON.stringify(item))
+      }
+      this.$refs.editForm.modalVisible = true
+    },
     backward () {
       this.$router.back()
     },

@@ -33,7 +33,7 @@
                 编辑
               </span>
               <a-popconfirm v-if="tableData.length"
-                            :title="'确定删除 “'+ record.username + '” 吗？'"
+                            :title="`确定删除 “${record.username}” 吗？`"
                             ok-text="确定"
                             cancel-text="取消"
                             @confirm="() => onDelete(record)">

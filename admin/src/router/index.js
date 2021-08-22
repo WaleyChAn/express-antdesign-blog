@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import store from '../store'
 import layout from '@/shared/layout.vue'
 import login from '@/shared/login.vue'
 import posts from '@/views/post/list.vue'
@@ -65,24 +64,15 @@ const router = new Router({
     {
       path: '/login',
       name: 'login',
-      component: login,
-      meta: {
-        isPublic: true
-      }
+      component: login
     },
     {
       path: '/403',
-      component: () => import('@/shared/403'),
-      meta: {
-        isPublic: true
-      }
+      component: () => import('@/shared/403')
     },
     {
       path: '/404',
-      component: () => import('@/shared/404'),
-      meta: {
-        isPublic: true
-      }
+      component: () => import('@/shared/404')
     },
     {
       path: '*',
@@ -90,25 +80,6 @@ const router = new Router({
       redirect: '/404'
     }
   ]
-})
-
-router.beforeEach(async (to, from, next) => {
-  const token = Vue.prototype.$storage.get('token')
-  let currentUser = store.state.currentUser
-  if (!currentUser && token) {
-    currentUser = await store.dispatch('fetchCurrentUser')
-  }
-
-  if (!currentUser && !to.meta.isPublic) {
-    router.push({
-      name: 'login',
-      params: { to: to }
-    })
-  } else if (currentUser && to.path === '/login') {
-    next('/')
-  } else {
-    next()
-  }
 })
 
 export default router

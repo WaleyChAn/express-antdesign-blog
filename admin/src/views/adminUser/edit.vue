@@ -16,7 +16,8 @@
                       list-type="picture-card"
                       class="badmin-uploader-avatar"
                       :show-upload-list="false"
-                      :action="$http.defaults.baseURL + '/upload'"
+                      :action="mixinUploadUrl()"
+                      :headers="mixinAuthHeaders()"
                       :before-upload="beforeUpload"
                       @change="handleChange">
               <img v-if="tmpItem.avatar"
@@ -32,7 +33,8 @@
           <a-form-model-item label="名称"
                              prop="username">
             <a-input v-model="tmpItem.username"
-                     placeholder="请输入名称" />
+                     placeholder="请输入名称"
+                     :disabled="tmpItem._id ? true : false" />
           </a-form-model-item>
           <a-form-model-item label="昵称"
                              prop="nickname">
@@ -76,6 +78,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'BadminAdminUserEdit',
@@ -148,6 +151,11 @@ export default {
   created () {
     this.tmpItem = this.value
   },
+  computed: {
+    ...mapGetters({
+      currentUser: 'getCurrentUser'
+    })
+  },
   methods: {
     handleOk () {
       let _this = this
@@ -187,7 +195,11 @@ export default {
       this.modalLoading = false
       if (res && res.data) {
         this.$message.success('修改成功！')
-        this.fetchData()
+        if (this.currentUser._id === id) {
+          this.$router.go(0)
+        } else {
+          this.fetchData()
+        }
         this.modalVisible = false
       }
     },

@@ -8,7 +8,7 @@ const http = axios.create({
 // req
 http.interceptors.request.use(config => {
   if (Vue.prototype.$storage.get('token')) {
-    config.headers.Authorization = 'Bearer ' + Vue.prototype.$storage.get('token')
+    config.headers.Authorization = `Bearer ${Vue.prototype.$storage.get('token')}`
   }
   return config
 }, err => {

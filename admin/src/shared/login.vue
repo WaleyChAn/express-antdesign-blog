@@ -56,7 +56,7 @@ export default {
       }
     }
     return {
-      loginParams: this.$route.params,
+      loginParams: this.$route.query,
       loading: false,
       form: {
         username: '',
@@ -101,10 +101,7 @@ export default {
       }
     },
     goNext () {
-      let nextPath = '/'
-      if (this.loginParams.to) {
-        nextPath = this.loginParams.to.path
-      }
+      const nextPath = this.loginParams.redirect || '/'
       this.$router.push(nextPath)
       this.loading = false
     }
