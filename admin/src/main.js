@@ -10,7 +10,6 @@ import Antd from 'ant-design-vue'
 import '@/assets/css/antd-variable.less'
 import '@/assets/css/site.less'
 
-Vue.config.productionTip = false
 Vue.use(Antd)
 Vue.prototype.$storage = storage
 Vue.prototype.$http = http

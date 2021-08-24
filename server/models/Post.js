@@ -12,6 +12,7 @@ const schema = new mongoose.Schema({
     }
   ],
   cover: { type: String },
+  state: { type: Number },
   body: { type: String }
 }, {
   timestamps: true

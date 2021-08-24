@@ -82,26 +82,6 @@ const tableColumns = [
   }
 ]
 
-const tableData = [
-  {
-    _id: 'testeac7444f354a987f44b6',
-    title: '测试帖子',
-    author: {},
-    categories: [
-      {
-        _id: '611ceac7444f354a987f44b6',
-        color: '#409eff',
-        name: 'Skill'
-      },
-      {
-        _id: '611cead5444f354a987f44ba',
-        color: '#67c23a',
-        name: 'ACG'
-      }
-    ]
-  }
-]
-
 export default {
   name: 'BadminPostList',
   components: {
@@ -109,7 +89,7 @@ export default {
   },
   data () {
     return {
-      tableData,
+      tableData: [],
       tableColumns,
       tableScrollX: false,
       tableScrollY: true,
@@ -117,7 +97,7 @@ export default {
     }
   },
   created () {
-    // this.fetchData()
+    this.fetchData()
   },
   methods: {
     setTableClass () {
