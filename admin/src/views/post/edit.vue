@@ -69,6 +69,10 @@
               私密
             </a-radio-button>
           </a-radio-group>
+          <div class="form-tips">
+            <a-icon class="mr-xs"
+                    type="info-circle" />选择私密后，在博客内将不会展示，在后台依旧可以查看并管理
+          </div>
         </a-form-model-item>
         <!-- state -->
       </a-form-model>
