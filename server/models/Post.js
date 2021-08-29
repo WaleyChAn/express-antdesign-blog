@@ -12,6 +12,7 @@ const schema = new mongoose.Schema({
     }
   ],
   cover: { type: String },
+  isPublic: { type: Boolean },
   state: { type: Number },
   body: { type: String }
 }, {

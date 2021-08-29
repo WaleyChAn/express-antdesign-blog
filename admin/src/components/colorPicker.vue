@@ -47,8 +47,7 @@ export default {
           '#409eff',
           '#67c23a',
           '#f56c6c',
-          '#f8b62b',
-          '#c0c4cc'
+          '#f8b62b'
         ]
       }
     }

@@ -56,7 +56,7 @@ export default {
       const res = await this.$http.get('rest/categories')
       this.loading = false
       if (res && res.data) {
-        this.list = res.data
+        this.list = res.data.result
       }
     },
     itemClick (id) {

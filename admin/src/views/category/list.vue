@@ -106,8 +106,8 @@ export default {
   methods: {
     setTableClass () {
       return [
-        { 'scoll-x': this.tableScrollX },
-        { 'scoll-y': this.tableScrollY }
+        { 'scroll-x': this.tableScrollX },
+        { 'scroll-y': this.tableScrollY }
       ]
     },
     showModal (item) {
@@ -133,7 +133,7 @@ export default {
       const res = await this.$http.get('rest/categories')
       this.tableLoading = false
       if (res && res.data) {
-        this.tableData = res.data
+        this.tableData = res.data.result
       }
     }
   }

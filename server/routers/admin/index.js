@@ -4,8 +4,11 @@ module.exports = app => {
   const multer = require('multer')
   const bcrypt = require('bcryptjs')
   const jwt = require('jsonwebtoken')
-
+  // models
   const AdminUser = require('../../models/AdminUser')
+  const Category = require('../../models/Category')
+  const Post = require('../../models/Post')
+  // middleware
   const authMiddleware = require('../../middleware/auth')
   const resourceMiddleware = require('../../middleware/resource')
 
@@ -14,14 +17,33 @@ module.exports = app => {
   })
 
   router.get('/', async (req, res) => {
-    const data = await req.Model.find()
-    res.send(data)
+    const {
+      where = '{}',
+      sort = '{}',
+      populate = '',
+      select = '',
+      page = 1,
+      limit = 0
+    } = req.query
+    const result = await req.Model
+      .find(JSON.parse(where))
+      .sort(JSON.parse(sort))
+      .populate(populate)
+      .select(select)
+      .skip(limit * (page - 1))
+      .limit(parseInt(limit))
+    const total = await req.Model.find(JSON.parse(where)).countDocuments()
+    res.send({
+      result,
+      total
+    })
   })
 
   router.post('/', async (req, res) => {
     const data = await req.Model.create(req.body)
     res.send(data)
   })
+
 
   router.delete('/:id', async (req, res) => {
     await req.Model.findByIdAndDelete(req.params.id)

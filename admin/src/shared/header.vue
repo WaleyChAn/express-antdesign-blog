@@ -67,7 +67,8 @@
       <div class="right ml-sm">
         <a-button type="primary"
                   shape="round"
-                  icon="form">
+                  icon="form"
+                  @click="createPost">
           新增帖子
         </a-button>
       </div>
@@ -116,6 +117,9 @@ export default {
     },
     backward () {
       this.$router.back()
+    },
+    createPost () {
+      this.$router.push('/posts/edit')
     },
     logout () {
       let _this = this
