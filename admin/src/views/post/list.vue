@@ -24,7 +24,7 @@
                           icon="user"
                           alt="avatar"
                           size="small" />
-                <span class="ml-xs">{{ record.author.nickname || record.author.username }}</span>
+                <span class="name">{{ record.author.nickname || record.author.username }}</span>
               </div>
             </template>
             <template slot="createdAt"
@@ -52,7 +52,7 @@
             </template>
             <template slot="isPublic"
                       slot-scope="text, record">
-              <div :class="{'text-primary': record.isPublic}">
+              <div :class="[{'text-primary': record.isPublic}, {'opacity-5': !record.isPublic}]">
                 <a-icon :type="record.isPublic ? 'unlock' : 'lock'" />
                 {{ record.isPublic ? '公开' : '私密' }}
               </div>
@@ -70,7 +70,7 @@
                 编辑
               </span>
               <a-popconfirm v-if="tableData.length"
-                            :title="`确定删除 “${record.title}” 吗？`"
+                            :title="`确定删除帖子吗？`"
                             ok-text="确定"
                             cancel-text="取消"
                             @confirm="() => onDelete(record._id)">

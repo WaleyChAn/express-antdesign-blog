@@ -58,11 +58,6 @@ import EditForm from './edit.vue'
 
 const tableColumns = [
   {
-    title: 'ID',
-    dataIndex: '_id',
-    key: '_id'
-  },
-  {
     title: '头像',
     dataIndex: 'avatar',
     key: 'avatar',

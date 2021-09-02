@@ -16,23 +16,38 @@ module.exports = app => {
     mergeParams: true
   })
 
+  const getObject = obj => {
+    try {
+      return JSON.parse(obj)
+    } catch {
+      return obj || {}
+    }
+  }
+  const getArray = arr => {
+    try {
+      return JSON.parse(arr)
+    } catch {
+      return arr || []
+    }
+  }
+
   router.get('/', async (req, res) => {
     const {
-      where = '{}',
-      sort = '{}',
+      where = {},
+      sort = {},
       populate = '',
       select = '',
       page = 1,
       limit = 0
     } = req.query
     const result = await req.Model
-      .find(JSON.parse(where))
-      .sort(JSON.parse(sort))
-      .populate(populate)
+      .find(getObject(where))
+      .sort(getObject(sort))
+      .populate(getArray(populate))
       .select(select)
       .skip(limit * (page - 1))
       .limit(parseInt(limit))
-    const total = await req.Model.find(JSON.parse(where)).countDocuments()
+    const total = await req.Model.find(getObject(where)).countDocuments()
     res.send({
       result,
       total
@@ -58,11 +73,18 @@ module.exports = app => {
   })
 
   router.get('/:id', async (req, res) => {
+    const {
+      populate = '',
+      select = ''
+    } = req.query
     let data = {}
     if (req.params.id === 'current_user') {
       data = req.user
     } else {
-      data = await req.Model.findById(req.params.id)
+      data = await req.Model
+        .findById(req.params.id)
+        .populate(populate)
+        .select(select)
     }
     res.send(data)
   })

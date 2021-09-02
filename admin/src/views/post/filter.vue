@@ -42,9 +42,8 @@
               <a-col :span="6">
                 <a-form-model-item label="作者">
                   <a-select v-model="searchVal.author"
-                            show-search
-                            @dropdownVisibleChange="fetchSearcOption('admin_users')"
-                            placeholder="请选择作者">
+                            placeholder="请选择作者"
+                            @dropdownVisibleChange="fetchSearcOption('admin_users')">
                     <a-spin v-if="searchLoading.admin_users"
                             slot="notFoundContent"
                             size="small" />
@@ -72,6 +71,7 @@
               <a-col :span="6">
                 <a-form-model-item label="分类">
                   <a-select v-model="searchVal.categories"
+                            show-arrow
                             placeholder="请选择分类"
                             mode="multiple"
                             @dropdownVisibleChange="fetchSearcOption('categories')">
