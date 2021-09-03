@@ -52,7 +52,8 @@
               <a-icon type="edit" />
               <span>修改信息</span>
             </a-menu-item>
-            <a-menu-item>
+            <a-menu-item v-if="currentUser.nickname === 'admin'"
+                         @click="goto('/sites')">
               <a-icon type="setting" />
               <span>博客设置</span>
             </a-menu-item>
@@ -131,6 +132,9 @@ export default {
         },
         class: 'badmin-modal'
       })
+    },
+    goto (path) {
+      this.$router.push(path)
     }
   }
 }

@@ -31,6 +31,7 @@ export default [
     key: '3',
     title: '系统设置',
     icon: 'setting',
+    roles: ['admin'],
     children: [
       {
         key: '3-1',

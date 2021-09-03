@@ -17,7 +17,13 @@ const schema = new mongoose.Schema({
       return bcrypt.hashSync(val, 10)
     }
   },
-  avatar: { type: String }
+  avatar: { type: String },
+  site: {
+    title: { type: String },
+    ico: { type: String },
+    logo: { type: String },
+    color: { type: String }
+  }
 })
 schema.plugin(beautifyUnique)
 module.exports = mongoose.model('AdminUser', schema)

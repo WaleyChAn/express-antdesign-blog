@@ -7,6 +7,31 @@
            class="box-superscript">草 稿</div>
       <div class="box-scroll-wrapper scroll-y">
         <div class="badmin-form badmin-form-post">
+          <div v-if="tmpItem._id"
+               class="badmin-alert layout-flex mb-sm">
+            <div class="layout-flex-l">
+              <div class="alert-wrapper clearfix">
+                <div class="alert-item left">
+                  <div class="badmin-avatar">
+                    <a-avatar :src="tmpItem.author.avatar"
+                              icon="user"
+                              alt="avatar"
+                              size="small" />
+                    <span class="name">{{ tmpItem.author.nickname || tmpItem.author.username }}</span>
+                  </div>
+                </div>
+                <!-- item -->
+                <div class="alert-item left">
+                  创建时间：{{ tmpItem.createdAt | date }}
+                </div>
+                <!-- item -->
+                <div class="alert-item left">
+                  最新更新：{{ tmpItem.updatedAt | date }}
+                </div>
+                <!-- item -->
+              </div>
+            </div>
+          </div>
           <div class="post-title">
             <a-textarea v-model="tmpItem.title"
                         placeholder="请输入标题（建议40字以内）"
@@ -121,6 +146,7 @@
 import TinymceEditor from '@/components/tinymceEditor.vue'
 import CategoryPicker from '@/components/categoryPicker.vue'
 import { mapGetters } from 'vuex'
+import dayjs from 'dayjs'
 
 export default {
   name: 'BadminPostEdit',
@@ -128,12 +154,20 @@ export default {
     TinymceEditor,
     CategoryPicker
   },
+  filters: {
+    date (val) {
+      return dayjs(val).format('YYYY-MM-DD')
+    }
+  },
   data () {
     return {
       tmpItem: {},
       submitLoading: null,
       uploadLoading: false,
-      pageLoading: false
+      pageLoading: false,
+      fetchOpt: {
+        populate: 'author'
+      }
     }
   },
   computed: {
@@ -243,8 +277,10 @@ export default {
     },
     async fetchItem () {
       if (this.postID) {
+        const { populate } = this.fetchOpt
+        const query = { populate }
         this.pageLoading = true
-        const res = await this.$http.get(`rest/posts/${this.postID}`)
+        const res = await this.$http.get(`rest/posts/${this.postID}`, { params: query })
         if (res && res.data) {
           this.tmpItem = res.data
         }

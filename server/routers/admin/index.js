@@ -83,7 +83,7 @@ module.exports = app => {
     } else {
       data = await req.Model
         .findById(req.params.id)
-        .populate(populate)
+        .populate(getArray(populate))
         .select(select)
     }
     res.send(data)
