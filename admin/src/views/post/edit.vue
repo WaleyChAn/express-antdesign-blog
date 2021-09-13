@@ -47,11 +47,22 @@
           <!-- body -->
           <a-form-model ref="editForm"
                         :model="tmpItem">
-            <a-form-model-item label="请选择帖子分类">
-              <category-picker v-model="tmpItem.categories"></category-picker>
+            <a-form-model-item label="描述">
+              <a-textarea v-model="tmpItem.desc"
+                          placeholder="帖子描述会在首页，以及其他预览页面作为正文预览展示"
+                          :auto-size="{ minRows: 3, maxRows: 5 }" />
               <div class="form-tips">
                 <a-icon class="mr-xs"
-                        type="info-circle" />非必选，若不选择分类，则默认为其他分类
+                        type="info-circle" />非必填，若不填写，则默认会截取正文前面的部分内容作为描述
+              </div>
+            </a-form-model-item>
+            <!-- categories -->
+            <a-form-model-item label="分类">
+              <category-picker v-model="tmpItem.categories"
+                               @setDefault="setDefaultCat"></category-picker>
+              <div class="form-tips">
+                <a-icon class="mr-xs"
+                        type="info-circle" />非必选，若不选择分类，则默认为{{ defaultCat.name || '' }}分类
               </div>
             </a-form-model-item>
             <!-- categories -->
@@ -165,6 +176,7 @@ export default {
       submitLoading: null,
       uploadLoading: false,
       pageLoading: false,
+      defaultCat: {},
       fetchOpt: {
         populate: 'author'
       }
@@ -182,6 +194,9 @@ export default {
     this.fetchItem()
   },
   methods: {
+    setDefaultCat (item) {
+      this.defaultCat = item
+    },
     async handleSubmit (state) {
       const requireParams = {
         author: this.currentUser,
@@ -190,6 +205,18 @@ export default {
       }
       this.tmpItem = Object.assign(requireParams, this.tmpItem)
       this.tmpItem.state = state
+      if (!this.tmpItem.desc) {
+        const maxDesc = 50
+        const body = this.tmpItem.body
+          .replace(/<.*?>/ig, '')
+          .replace(/\n/ig, '')
+          .replace(/&nbsp;/ig, '')
+        const isEllipsis = body.length > maxDesc ? '...' : ''
+        this.tmpItem.desc = body.slice(0, maxDesc) + isEllipsis
+      }
+      if (this.tmpItem.categories.length === 0) {
+        this.tmpItem.categories.push(this.defaultCat._id)
+      }
       await this.handleValidate()
       this.submitLoading = state
       if (this.tmpItem._id) {

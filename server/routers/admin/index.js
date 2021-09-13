@@ -20,14 +20,7 @@ module.exports = app => {
     try {
       return JSON.parse(obj)
     } catch {
-      return obj || {}
-    }
-  }
-  const getArray = arr => {
-    try {
-      return JSON.parse(arr)
-    } catch {
-      return arr || []
+      return obj
     }
   }
 
@@ -43,7 +36,7 @@ module.exports = app => {
     const result = await req.Model
       .find(getObject(where))
       .sort(getObject(sort))
-      .populate(getArray(populate))
+      .populate(getObject(populate))
       .select(select)
       .skip(limit * (page - 1))
       .limit(parseInt(limit))
@@ -83,7 +76,7 @@ module.exports = app => {
     } else {
       data = await req.Model
         .findById(req.params.id)
-        .populate(getArray(populate))
+        .populate(getObject(populate))
         .select(select)
     }
     res.send(data)

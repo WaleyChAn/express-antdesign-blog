@@ -20,6 +20,7 @@ import 'tinymce/icons/default/icons'
 import 'tinymce/plugins/code'
 import 'tinymce/plugins/lists'
 import 'tinymce/plugins/wordcount'
+import 'tinymce/plugins/fullscreen'
 // plugins custom
 import '/public/tinymce/plugins/image'
 import '/public/tinymce/plugins/indent2em'
@@ -44,11 +45,11 @@ export default {
     },
     plugins: {
       type: [String, Array],
-      default: 'code lists image wordcount indent2em'
+      default: 'code lists image wordcount indent2em fullscreen'
     },
     toolbar: {
       type: [String, Array],
-      default: 'code | formatselect | bold italic forecolor backcolor | indent2em | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | lists image | removeformat'
+      default: 'code | fullscreen | formatselect | bold italic forecolor backcolor | indent2em | alignleft aligncenter alignright alignjustify | lists image | removeformat | bullist numlist outdent indent'
     }
   },
   data () {

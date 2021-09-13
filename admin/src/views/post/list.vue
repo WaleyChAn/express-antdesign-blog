@@ -47,7 +47,7 @@
                   </div>
                 </template>
                 <div v-else
-                     class="tags-item">其他</div>
+                     class="tags-item">无分类</div>
               </div>
             </template>
             <template slot="isPublic"
@@ -197,7 +197,7 @@ export default {
   },
   mounted () {
     if (this.tableScrollInner) {
-      this.$utils.mixinTableHeight(this)
+      this.mixinTableHeight()
     }
     this.fetchData()
   },

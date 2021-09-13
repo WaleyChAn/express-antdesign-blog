@@ -28,15 +28,13 @@
               {{ tmpPost.createdAt | date }}
             </span>
           </div>
-          <div class="info-item">
+          <div class="info-item"
+               v-if="tmpPost.categories.length > 0">
             <a-icon type="tags" />
-            <template v-if="tmpPost.categories.length > 0">
-              <span v-for="(citem, cindex) in tmpPost.categories"
-                    :key="cindex">
-                {{ citem.name }}
-              </span>
-            </template>
-            <span v-else>其他</span>
+            <span v-for="(citem, cindex) in tmpPost.categories"
+                  :key="cindex">
+              {{ citem.name }}
+            </span>
           </div>
         </div>
       </div>
@@ -84,15 +82,13 @@
                     {{ item.createdAt | date }}
                   </span>
                 </div>
-                <div class="info-item">
+                <div class="info-item"
+                     v-if="item.categories.length > 0">
                   <a-icon type="tags" />
-                  <template v-if="item.categories.length > 0">
-                    <span v-for="(citem, cindex) in item.categories"
-                          :key="cindex">
-                      {{ citem.name }}
-                    </span>
-                  </template>
-                  <span v-else>其他</span>
+                  <span v-for="(citem, cindex) in item.categories"
+                        :key="cindex">
+                    {{ citem.name }}
+                  </span>
                 </div>
               </div>
             </div>

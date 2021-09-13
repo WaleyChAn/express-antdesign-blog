@@ -1,4 +1,5 @@
-const prefix = process.env.VUE_APP_NAME
+import config from '../config'
+const prefix = config.appName
 
 const storage = {
   /**

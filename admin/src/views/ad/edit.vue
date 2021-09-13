@@ -34,6 +34,11 @@
               <a-input v-model="tmpItem.site.title"
                        placeholder="请输入标题" />
             </a-form-model-item>
+            <a-form-model-item label="描述">
+              <a-textarea v-model="tmpItem.site.desc"
+                          placeholder="请输入描述"
+                          :auto-size="{ minRows: 3, maxRows: 5 }" />
+            </a-form-model-item>
             <a-form-model-item label="链接地址">
               <a-input v-model="tmpItem.site.url"
                        placeholder="请输入链接地址" />
@@ -188,7 +193,7 @@ export default {
       return isJpgOrPng && isLt5M
     },
     async onSave () {
-      const adID = this.tmpItem.type + Number(new Date()).toString(36).toLocaleUpperCase()
+      const adID = 'ad' + this.tmpItem.type + Number(new Date()).toString(36)
       this.$set(this.tmpItem, 'adID', adID)
       const res = await this.$http.post('rest/ads', this.tmpItem)
       this.modalLoading = false

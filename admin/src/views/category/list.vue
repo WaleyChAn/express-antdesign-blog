@@ -39,7 +39,7 @@
                             :title="`确定删除 “${record.name}” 吗？`"
                             ok-text="确定"
                             cancel-text="取消"
-                            @confirm="() => onDelete(record._id)">
+                            @confirm="() => onDelete(record)">
                 <span class="table-btn text-error">
                   <a-icon type="delete" />
                   删除
@@ -60,6 +60,11 @@
 import EditForm from './edit.vue'
 
 const tableColumns = [
+  {
+    title: 'ID',
+    dataIndex: 'catID',
+    key: 'catID'
+  },
   {
     title: '名称',
     dataIndex: 'name',
@@ -116,11 +121,17 @@ export default {
       this.modalVisible = false
       this.$refs.modalForm.clearValidate()
     },
-    async onDelete (id) {
-      const res = await this.$http.delete(`rest/categories/${id}`)
-      if (res && res.data) {
-        this.$message.success('删除成功！')
-        this.fetchData()
+    async onDelete (item) {
+      const id = item._id
+      const catID = item.catID
+      if (catID === this.$config.defaultCategory) {
+        this.$message.warn('请不要删除默认分类')
+      } else {
+        const res = await this.$http.delete(`rest/categories/${id}`)
+        if (res && res.data) {
+          this.$message.success('删除成功！')
+          this.fetchData()
+        }
       }
     },
     async fetchData () {

@@ -8,6 +8,7 @@ const schema = new mongoose.Schema({
   },
   site: {
     title: { type: String },
+    desc: { type: String },
     cover: { type: String },
     url: { type: String }
   },

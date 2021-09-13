@@ -116,8 +116,8 @@ export default {
     async onDelete (item) {
       const id = item._id
       const username = item.username
-      if (username === 'admin') {
-        this.$message.warn('请不要删除管理员账号')
+      if (username === this.$config.defaultAdmin) {
+        this.$message.warn('请不要删除默认管理员账号')
       } else {
         const res = await this.$http.delete(`rest/admin_users/${id}`)
         if (res && res.data) {

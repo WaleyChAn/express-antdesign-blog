@@ -14,6 +14,22 @@ export default {
       return {
         Authorization: `Bearer ${this.$storage.get('token')}`
       }
+    },
+    mixinTableHeight () {
+      setTimeout(() => {
+        this.setTableHeight()
+        window.addEventListener('resize', () => {
+          this.setTableHeight()
+        })
+      }, 50)
+    },
+    setTableHeight () {
+      if (this.$refs.tableWrapper) {
+        const wrapperHeader = 54
+        const wrapperHeight = this.$refs.tableWrapper.clientHeight
+        this.tableScrollY = wrapperHeight - wrapperHeader
+        this.$forceUpdate()
+      }
     }
   }
 }

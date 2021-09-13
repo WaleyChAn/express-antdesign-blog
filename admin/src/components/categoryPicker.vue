@@ -57,6 +57,7 @@ export default {
       this.loading = false
       if (res && res.data) {
         this.list = res.data.result
+        this.$emit('setDefault', this.getDefault())
       }
     },
     itemClick (id) {
@@ -66,6 +67,16 @@ export default {
       } else {
         this.tmpValue.splice(index, 1)
       }
+    },
+    getDefault () {
+      const _this = this
+      let defaultCat = {}
+      _this.list.map(item => {
+        if (item.catID === _this.$config.defaultCategory) {
+          defaultCat = item
+        }
+      })
+      return defaultCat
     }
   }
 }

@@ -95,6 +95,8 @@ export default {
       this.$refs.modalForm.clearValidate()
     },
     async onSave () {
+      const catID = 'cat' + Number(new Date()).toString(36)
+      this.$set(this.tmpItem, 'catID', catID)
       const res = await this.$http.post('rest/categories', this.tmpItem)
       this.modalLoading = false
       if (res && res.data) {
