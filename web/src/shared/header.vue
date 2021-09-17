@@ -57,7 +57,7 @@ export default {
     async fetchNav () {
       const res = await this.$http.get('rest/categories')
       if (res && res.data) {
-        this.navList.push(...res.data)
+        this.navList.push(...res.data.result)
       }
     }
   }

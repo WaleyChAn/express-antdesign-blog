@@ -23,14 +23,18 @@ module.exports = app => {
       page = 1,
       limit = 0
     } = req.query
-    const data = await req.Model
+    const result = await req.Model
       .find(getObject(where))
       .sort(getObject(sort))
       .populate(getObject(populate))
       .select(select)
       .skip(limit * (page - 1))
       .limit(parseInt(limit))
-    res.send(data)
+    const total = await req.Model.find(getObject(where)).countDocuments()
+    res.send({
+      result,
+      total
+    })
   })
 
   router.get('/:id', async (req, res) => {

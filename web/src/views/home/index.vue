@@ -2,7 +2,9 @@
   <div class="oc-container">
     <div class="oc-card clear-both">
       <div class="oc-card-news col-box-4">
-        <card-swiper :swiperList="swiperList"></card-swiper>
+        <oc-affix :offsetTop="40">
+          <card-swiper :swiperList="swiperList"></card-swiper>
+        </oc-affix>
         <!-- swiper -->
       </div>
       <!-- news -->
@@ -10,9 +12,9 @@
         <div class="oc-card-column col-box-6"
              v-for="(item,index) in cardList"
              :key="index">
-          <div class="oc-card-item"
-               @click="goDetails(item._id)">
-            <div class="oc-card-cover">
+          <div class="oc-card-item">
+            <div class="oc-card-cover"
+                 @click="goDetails(item._id)">
               <!-- <img :src="item.cover"> -->
               <font :style="coverBackground(item.cover)"></font>
               <span>{{item.title}}</span>
@@ -21,22 +23,34 @@
             <div class="oc-card-info">
               <dl>
                 <dt>
-                  <span v-for="(citem, cindex) in item.categories"
-                        :key="cindex"
-                        :style="{backgroundColor: citem.color}">{{ citem.name }}</span>
+                  <div class="wrapper">
+                    <span v-for="(citem, cindex) in item.categories"
+                          :key="cindex"
+                          :style="{backgroundColor: citem.color}"
+                          @click="tagsClick(citem)">{{ citem.name }}</span>
+                    <div class="wrapper-btn"
+                         @click="goDetails(item._id)">
+                      <i class="fa fa-ellipsis-h"></i>
+                    </div>
+                  </div>
                 </dt>
                 <dd>{{ item.createdAt | date }}</dd>
               </dl>
               <!-- dl -->
-              <b>{{ item.title }}</b>
-              <p>{{ item.desc }}</p>
-              <!-- p -->
+              <div class="card-info-main"
+                   @click="goDetails(item._id)">
+                <b>{{ item.title }}</b>
+                <p>{{ item.desc }}</p>
+                <!-- p -->
+              </div>
             </div>
             <!-- info -->
           </div>
           <!-- item -->
         </div>
         <!-- column -->
+        <oc-skeleton :state="skeletonState"
+                     @show="onShowMore()"></oc-skeleton>
       </div>
       <!-- main -->
     </div>
@@ -46,13 +60,17 @@
 
 <script>
 import CardSwiper from '@/components/cardSwiper'
-import { mapGetters } from 'vuex'
+import OcSkeleton from '@/components/skeleton'
+import OcAffix from '@/components/affix'
+import { mapGetters, mapMutations } from 'vuex'
 import dayjs from 'dayjs'
 
 export default {
   name: 'OcHome',
   components: {
-    CardSwiper
+    CardSwiper,
+    OcSkeleton,
+    OcAffix
   },
   filters: {
     date (val) {
@@ -88,7 +106,8 @@ export default {
         categories: [],
         createdRange: [],
         updatedRange: []
-      }
+      },
+      skeletonState: 'loading'
     }
   },
   computed: {
@@ -108,6 +127,8 @@ export default {
   },
   watch: {
     currentNav () {
+      this.listPaginationOpt.current = 1
+      this.cardList = []
       this.fetchPost()
     }
   },
@@ -116,6 +137,9 @@ export default {
     this.fetchAd()
   },
   methods: {
+    ...mapMutations({
+      updateCurrenNav: 'UPDATE_CURRENT_NAV'
+    }),
     coverBackground (url) {
       let coverStyle = { backgroundImage: 'url(' + url + ')' }
       return coverStyle
@@ -127,6 +151,16 @@ export default {
           id: id
         }
       })
+    },
+    tagsClick (item) {
+      this.updateCurrenNav(item._id || 'home')
+      this.$router.push('/')
+    },
+    onShowMore () {
+      if (this.skeletonState !== 'done') {
+        this.listPaginationOpt.current++
+        this.fetchPost()
+      }
     },
     setFilters (opt = [], arr = []) {
       opt.map(({ valid, filter }) => {
@@ -203,13 +237,19 @@ export default {
       return where
     },
     async fetchPost () {
+      this.skeletonState = 'loading'
       const { current: page, size: limit } = this.listPaginationOpt
       const { populate, select, sort } = this.listFetchOpt
       const where = this.getFilters()
       const query = { where, populate, select, sort, page, limit }
       const res = await this.$http.get('rest/posts', { params: query })
       if (res && res.data) {
-        this.cardList = res.data
+        this.cardList.push(...res.data.result)
+        if (this.cardList.length === res.data.total) {
+          this.skeletonState = 'done'
+        } else {
+          this.skeletonState = 'await'
+        }
       }
     },
     async fetchAd () {
@@ -217,7 +257,7 @@ export default {
       const query = { populate }
       const res = await this.$http.get('rest/ads', { params: query })
       if (res && res.data) {
-        this.swiperList = res.data.map(item => {
+        this.swiperList = res.data.result.map(item => {
           this.$set(item, 'content', item.type === 1 ? item.post : item.site)
           return item
         })

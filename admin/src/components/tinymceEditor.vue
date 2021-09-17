@@ -49,7 +49,7 @@ export default {
     },
     toolbar: {
       type: [String, Array],
-      default: 'code | fullscreen | formatselect | bold italic forecolor backcolor | indent2em | alignleft aligncenter alignright alignjustify | lists image | removeformat | bullist numlist outdent indent'
+      default: 'code | fullscreen | formatselect | bold italic forecolor backcolor | indent2em | alignleft aligncenter alignright alignjustify | lists image | removeformat | undo redo | bullist numlist outdent indent'
     }
   },
   data () {

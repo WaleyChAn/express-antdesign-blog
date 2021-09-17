@@ -210,7 +210,6 @@ body {
     }
 
     .oc-card-item {
-      cursor: pointer;
 
       .oc-card-cover {
         position: relative;
@@ -219,6 +218,7 @@ body {
         padding-bottom: 50%;
         box-shadow: $--oc-box-shadow-light;
         -webkit-box-shadow: $--oc-box-shadow-light;
+        cursor: pointer;
         overflow: hidden;
 
         font {
@@ -248,6 +248,7 @@ body {
           line-height: 24px;
           color: $--oc-color-white;
           text-shadow: 0 1px 3px $--oc-color-black;
+          word-break: break-all;
           background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .4));
           width: 100%;
           z-index: 2;
@@ -256,6 +257,7 @@ body {
 
       .oc-card-info {
         border-radius: 10px;
+        height: 161px;
         padding: 20px;
         width: 100%;
         background: $--oc-color-white;
@@ -263,17 +265,43 @@ body {
         -webkit-box-shadow: $--oc-box-shadow-light;
         overflow: hidden;
 
+        .card-info-main {
+          cursor: pointer;
+        }
+
         dl {
           margin-bottom: 10px;
 
           dt {
+            height: 26px;
             overflow: hidden;
+
+            .wrapper {
+              position: relative;
+              overflow: hidden;
+
+              .wrapper-btn {
+                position: absolute;
+                top: 0;
+                bottom: 26px;
+                right: 0;
+                line-height: 20px;
+                transition: all .3s;
+                color: $--oc-color-text-secondary;
+                overflow: hidden;
+                cursor: pointer;
+
+                &:hover {
+                  color: $--oc-color-text-primary;
+                }
+              }
+            }
 
             span {
               display: block;
               float: left;
-              margin-right: 5px;
-              margin-bottom: 5px;
+              margin-right: 6px;
+              margin-bottom: 6px;
               font-size: 12px;
               line-height: 20px;
               white-space: nowrap;
@@ -281,6 +309,7 @@ body {
               border-radius: 10px;
               color: $--oc-color-white;
               background: $--oc-color-text-placeholder;
+              cursor: pointer;
 
               &.type-1 {
                 background: $--oc-color-primary;
@@ -543,6 +572,8 @@ body {
 
   .details-body {
     padding: 0 80px;
+    line-height: 1.875;
+    color: $--oc-color-text-regular;
 
     img {
       max-width: 100%;
@@ -612,9 +643,7 @@ body {
 // gotop
 .oc-gotop {
   position: fixed;
-  left: 50%;
-  margin-left: 610px;
-  // right: 40px;
+  left: calc(50% + 610px);
   bottom: 0;
   z-index: 10;
 
@@ -691,6 +720,67 @@ body {
   }
 }
 
+// affix
+.oc-affix {
+  &.affixing {
+    .affix-wrapper {
+      position: fixed;
+      z-index: 10;
+    }
+  }
+}
+
+// skeleton
+.oc-skeleton {
+  .skeleton-item {
+    display: block;
+    width: 100%;
+    min-width: 20px;
+    height: 20px;
+    background: linear-gradient(90deg, $--oc-background-color-base 25%, $--oc-border-color-light 37%, $--oc-background-color-base 63%);
+    background-size: 400% 100%;
+    margin-top: 10px;
+
+    &.cover {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: auto;
+    }
+
+    &.animation {
+      -webkit-animation: skeleton-loading 1.4s ease infinite;
+      animation: skeleton-loading 1.4s ease infinite;
+    }
+
+    &:first-child {
+      margin: 0;
+    }
+  }
+}
+
+@-webkit-keyframes skeleton-loading {
+  0% {
+    background-position: 100% 50%
+  }
+
+  to {
+    background-position: 0 50%
+  }
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 100% 50%
+  }
+
+  to {
+    background-position: 0 50%
+  }
+}
+
 @media screen and (max-width: 1280px) {
   .oc-container {
     width: 1000px;
@@ -734,11 +824,7 @@ body {
   }
 
   .oc-gotop {
-    margin-left: 490px;
-
-    .gotop-wrapper {
-      max-width: 1060px;
-    }
+    left: calc(50% + 490px);
   }
 }
 
@@ -750,7 +836,6 @@ body {
   .oc-gotop {
     left: auto;
     right: 40px;
-    margin-left: 0;
 
     .gotop-content {
       ul {
@@ -852,6 +937,13 @@ body {
     }
   }
 
+  .oc-affix {
+    &.affixing {
+      .affix-wrapper {
+        position: static;
+      }
+    }
+  }
 }
 
 @media screen and (max-width: 768px) {
@@ -1001,6 +1093,12 @@ body {
         line-height: 30px;
         padding: 0 20px;
       }
+    }
+  }
+
+  .oc-skeleton {
+    .skeleton-item {
+      height: 15px;
     }
   }
 }

@@ -40,7 +40,8 @@
           <div v-for="(item, index) in tmpItem.categories"
                :key="index"
                :style="{backgroundColor: item.color}"
-               class="tags-item">{{ item.name }}</div>
+               class="tags-item"
+               @click="tagsClick(item)">{{ item.name }}</div>
         </div>
         <!-- tags -->
       </div>
@@ -51,7 +52,7 @@
 
 <script>
 import dayjs from 'dayjs'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'OcDetails',
@@ -81,8 +82,15 @@ export default {
     this.fetchData()
   },
   methods: {
+    ...mapMutations({
+      updateCurrenNav: 'UPDATE_CURRENT_NAV'
+    }),
     goto (path) {
       this.$router.push(path)
+    },
+    tagsClick (item) {
+      this.updateCurrenNav(item._id || 'home')
+      this.$router.push('/')
     },
     async fetchData () {
       if (this.postID) {
