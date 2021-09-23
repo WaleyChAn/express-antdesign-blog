@@ -866,14 +866,6 @@ table {
 }
 
 /* modify-20210906 */
-body {
-  max-width: 900px;
-  padding: 0 1rem;
-  margin: 0 auto;
-  line-height: 1.875;
-  color: #606266;
-}
-
 img {
   max-width: 100%;
   height: auto;

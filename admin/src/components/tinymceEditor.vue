@@ -25,6 +25,10 @@ import 'tinymce/plugins/fullscreen'
 import '/public/tinymce/plugins/image'
 import '/public/tinymce/plugins/indent2em'
 
+const localhost = process.env.NODE_ENV === 'production'
+  ? '/admin/'
+  : '/'
+
 export default {
   name: 'BadminTinymceEditor',
   components: {
@@ -58,10 +62,11 @@ export default {
       loading: true,
       isFocus: false,
       init: {
-        language_url: '/tinymce/langs/zh_CN.js',
+        language_url: `${localhost}tinymce/langs/zh_CN.js`,
         language: 'zh_CN',
         // http://skin.tiny.cloud
-        skin_url: '/tinymce/skins/ui/custom',
+        skin_url: `${localhost}tinymce/skins/ui/custom`,
+        content_css: [`${localhost}tinymce/skins/content/custom/content.min.css`],
         height: 400,
         plugins: this.plugins,
         toolbar: this.toolbar,

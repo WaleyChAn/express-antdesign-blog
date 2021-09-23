@@ -578,6 +578,7 @@ body {
     img {
       max-width: 100%;
       height: auto;
+      pointer-events: all;
     }
   }
 
@@ -613,6 +614,7 @@ body {
       border-radius: $--item-height / 2;
       color: $--oc-color-white;
       background: $--oc-border-color-base;
+      cursor: pointer;
     }
   }
 }

@@ -34,7 +34,8 @@
         </div>
         <!-- header -->
         <div class="details-body"
-             v-html="tmpItem.body"></div>
+             v-html="tmpItem.body"
+             @click="test"></div>
         <!-- body -->
         <div class="details-tags">
           <div v-for="(item, index) in tmpItem.categories"
@@ -91,6 +92,9 @@ export default {
     tagsClick (item) {
       this.updateCurrenNav(item._id || 'home')
       this.$router.push('/')
+    },
+    test (e) {
+      console.log(e.path[0].currentSrc)
     },
     async fetchData () {
       if (this.postID) {

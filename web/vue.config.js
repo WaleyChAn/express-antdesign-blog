@@ -1,3 +1,5 @@
+const path = require('path')
+
 module.exports = {
   css: {
     loaderOptions: {
@@ -5,5 +7,6 @@ module.exports = {
         additionalData: `@import "~@/assets/css/theme.scss";`
       }
     }
-  }
+  },
+  outputDir: path.resolve('../server/public/web')
 }
