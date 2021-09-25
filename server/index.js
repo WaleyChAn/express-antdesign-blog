@@ -11,6 +11,12 @@ app.use('/admin', express.static(__dirname + '/public/admin'))
 app.use('/uploads', express.static(__dirname + '/uploads'))
 
 app.set('jwtSecrte', process.env.SERVER_JWT_SECRET)
+app.set('aliConfig', {
+  region: process.env.SERVER_ALI_REGION,
+  accessKeyId: process.env.SERVER_ALI_ACCESS_KEY_ID,
+  accessKeySecret: process.env.SERVER_ALI_ACCESS_KEY_SECRET,
+  bucket: process.env.SERVER_ALI_BUCKET
+})
 
 require('./plugins/db')(app)
 require('./routers/admin')(app)

@@ -2,6 +2,7 @@ module.exports = app => {
   const express = require('express')
   const assert = require('http-assert')
   const multer = require('multer')
+  const MAO = require('multer-aliyun-oss')
   const bcrypt = require('bcryptjs')
   const jwt = require('jsonwebtoken')
   // models
@@ -86,10 +87,15 @@ module.exports = app => {
   app.use('/admin/api/rest/:resource', authMiddleware({ model: AdminUser }), resourceMiddleware(), router)
 
   // upload
-  const upload = multer({ dest: __dirname + '/../../uploads' })
+  // const upload = multer({ dest: __dirname + '/../../uploads' })
+  const upload = multer({
+    storage: MAO({
+      config: app.get('aliConfig')
+    })
+  })
   app.post('/admin/api/upload', authMiddleware({ model: AdminUser }), upload.single('file'), async (req, res) => {
     const file = req.file
-    file.url = `http://localhost:3000/uploads/${file.filename}`
+    // file.url = `http://localhost:3000/uploads/${file.filename}`
     res.send(file)
   })
 
