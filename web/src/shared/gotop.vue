@@ -3,9 +3,9 @@
        :class="{'show-gotop': goTopShow}">
     <div class="gotop-content">
       <ul>
-        <!-- <li>
-          <i class="fa fa-home"></i>
-          <span>返 回<br />首 页</span>
+        <!-- <li @click="goOutside('https://github.com/WaleyChAn')">
+          <i class="fab fa-github"></i>
+          <span>ChAn's<br />github</span>
         </li> -->
         <li class="btn-gotop"
             @click="goTop()">
@@ -70,6 +70,11 @@ export default {
           _that.updateGoTopShow(false)
         }
       })
+    },
+    goOutside (path) {
+      if (path) {
+        window.open(path)
+      }
     }
   },
   mounted () {

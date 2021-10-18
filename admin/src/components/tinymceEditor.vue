@@ -21,6 +21,9 @@ import 'tinymce/plugins/code'
 import 'tinymce/plugins/lists'
 import 'tinymce/plugins/wordcount'
 import 'tinymce/plugins/fullscreen'
+import 'tinymce/plugins/codesample'
+import 'tinymce/plugins/media'
+import 'tinymce/plugins/paste'
 // plugins custom
 import '/public/tinymce/plugins/image'
 import '/public/tinymce/plugins/indent2em'
@@ -49,11 +52,11 @@ export default {
     },
     plugins: {
       type: [String, Array],
-      default: 'code lists image wordcount indent2em fullscreen'
+      default: 'code codesample lists image wordcount indent2em fullscreen paste media'
     },
     toolbar: {
       type: [String, Array],
-      default: 'code | fullscreen | formatselect | bold italic forecolor backcolor | indent2em | alignleft aligncenter alignright alignjustify | lists image | removeformat | undo redo | bullist numlist outdent indent'
+      default: 'code codesample | fullscreen | formatselect | bold italic forecolor backcolor | indent2em | alignleft aligncenter alignright alignjustify | lists image media | removeformat | undo redo | bullist numlist outdent indent'
     }
   },
   data () {
@@ -73,6 +76,7 @@ export default {
         branding: false,
         menubar: false,
         resize: false,
+        paste_data_images: true,
         init_instance_callback: editor => {
           this.loading = false
         },

@@ -1,6 +1,7 @@
 <template>
   <div class="oc-container">
-    Make by Waley
+    Make by <a href="https://github.com/WaleyChAn"
+       target="_blank">Waley <i class="fab fa-github"></i></a>
   </div>
 </template>
 

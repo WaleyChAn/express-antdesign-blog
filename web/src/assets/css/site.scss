@@ -176,6 +176,17 @@ body {
   line-height: 20px;
   color: $--oc-color-text-secondary;
   text-align: center;
+
+  a {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: all .3s;
+
+    &:hover {
+      color: $--oc-color-theme;
+    }
+  }
 }
 
 // content
