@@ -261,5 +261,10 @@ tinymce.addI18n('zh_CN', {
   "Alternative description": "\u66ff\u4ee3\u63cf\u8ff0",
   "Alternative source URL": "\u66ff\u4ee3\u6e90URL",
   "Media poster (Image URL)": "\u5a92\u4f53\u5c01\u9762\uff08\u56fe\u7247URL\uff09",
-  "Image...": "\u56fe\u7247\u002e\u002e\u002e"
+  "Image...": "\u56fe\u7247\u002e\u002e\u002e",
+  "Open link in...": "\u94fe\u63a5\u6253\u5f00\u65b9\u5f0f\u002e\u002e\u002e",
+  "Current window": "\u5f53\u524d\u7a97\u53e3\u6253\u5f00",
+  "Link...": "\u94fe\u63a5\u002e\u002e\u002e",
+  "Open link": "\u6253\u5f00\u94fe\u63a5",
+  "System Font": "\u9ed8\u8ba4\u5b57\u4f53"
 });

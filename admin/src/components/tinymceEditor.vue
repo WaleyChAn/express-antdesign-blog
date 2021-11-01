@@ -24,6 +24,7 @@ import 'tinymce/plugins/fullscreen'
 import 'tinymce/plugins/codesample'
 import 'tinymce/plugins/media'
 import 'tinymce/plugins/paste'
+import 'tinymce/plugins/link'
 // plugins custom
 import '/public/tinymce/plugins/image'
 import '/public/tinymce/plugins/indent2em'
@@ -52,11 +53,11 @@ export default {
     },
     plugins: {
       type: [String, Array],
-      default: 'code codesample lists image wordcount indent2em fullscreen paste media'
+      default: 'code codesample lists image wordcount indent2em fullscreen paste media link'
     },
     toolbar: {
       type: [String, Array],
-      default: 'code codesample | fullscreen | formatselect | bold italic forecolor backcolor | indent2em | alignleft aligncenter alignright alignjustify | lists image media | removeformat | undo redo | bullist numlist outdent indent'
+      default: 'code codesample | fullscreen | bold italic forecolor backcolor | indent2em | alignleft aligncenter alignright alignjustify | lists image media link | removeformat | undo redo | bullist numlist outdent indent | styleselect formatselect fontselect fontsizeselect'
     }
   },
   data () {
@@ -73,6 +74,7 @@ export default {
         height: 400,
         plugins: this.plugins,
         toolbar: this.toolbar,
+        font_formats: '微软雅黑=Microsoft YaHei,Helvetica Neue,PingFang SC,sans-serif;苹果苹方=PingFang SC,Microsoft YaHei,sans-serif;宋体=simsun,serif;仿宋体=FangSong,serif;黑体=SimHei,sans-serif;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;',
         branding: false,
         menubar: false,
         resize: false,

@@ -77,7 +77,8 @@
         <a-button type="primary"
                   ghost
                   shape="round"
-                  icon="home">
+                  icon="home"
+                  @click="goout('https://waleychan.com/#/')">
           访问博客
         </a-button>
       </div>
@@ -135,6 +136,9 @@ export default {
     },
     goto (path) {
       this.$router.push(path)
+    },
+    goout (path) {
+      window.open(path)
     }
   }
 }
