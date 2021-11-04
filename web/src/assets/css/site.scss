@@ -614,6 +614,7 @@ body {
 
     li {
       display: list-item;
+      list-style: inherit;
       text-align: -webkit-match-parent;
     }
   }
