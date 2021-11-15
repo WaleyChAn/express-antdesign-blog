@@ -617,6 +617,10 @@ body {
       list-style: inherit;
       text-align: -webkit-match-parent;
     }
+
+    pre[class*="language-"] {
+      border-radius: 0.3em;
+    }
   }
 
   .details-tags {

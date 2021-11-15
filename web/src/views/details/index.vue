@@ -34,8 +34,7 @@
         </div>
         <!-- header -->
         <div class="details-body"
-             v-html="tmpItem.body"
-             @click="test"></div>
+             v-html="tmpItem.body"></div>
         <!-- body -->
         <div class="details-tags">
           <div v-for="(item, index) in tmpItem.categories"
@@ -54,6 +53,9 @@
 <script>
 import dayjs from 'dayjs'
 import { mapGetters, mapMutations } from 'vuex'
+
+import Prism from 'prismjs'
+Prism.manual = true
 
 export default {
   name: 'OcDetails',
@@ -93,9 +95,6 @@ export default {
       this.updateCurrenNav(item._id || 'home')
       this.$router.push('/')
     },
-    test (e) {
-      console.log(e.path[0].currentSrc)
-    },
     async fetchData () {
       if (this.postID) {
         const { populate } = this.fetchOpt
@@ -105,6 +104,7 @@ export default {
         if (res && res.data) {
           this.tmpItem = res.data
         }
+        setTimeout(() => { Prism.highlightAll() }, 0)
         this.pageLoading = false
       }
     }

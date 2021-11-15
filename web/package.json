@@ -9,9 +9,11 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "babel-plugin-prismjs": "^2.1.0",
     "core-js": "^2.6.5",
     "dayjs": "^1.10.6",
     "node-sass": "^4.13.0",
+    "prismjs": "^1.25.0",
     "sass-loader": "^9.0.0",
     "vue": "^2.6.10",
     "vue-awesome-swiper": "^3.1.3",
